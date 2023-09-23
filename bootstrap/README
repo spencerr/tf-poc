@@ -1,0 +1,14 @@
+Environment Bootstrapping
+
+1. Create a storage account and container to hold the tfstate for the environment
+resource_group_name  = "tfpoc-init-${environment}-rg"
+storage_account_name = "tfpocinit${environment}sa"
+container_name       = "tfstate"
+
+2. Run the bootstrapper to create resources that require manual updates before proceeding to the main deployment.
+### Create Secrets
+In the KeyVault `tfpoc-bootstrap-alpha-kv` create the following secrets
+- `Test--Secret` - a random value for testing
+
+3. After the bootstrapper has been run and secrets are configured, the bootstrapper should no longer need to be ran frequently.
+4. The environment deployments can be ran and should be repeatable now.
