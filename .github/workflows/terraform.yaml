@@ -33,20 +33,28 @@ jobs:
         with:
           terraform_version: 1.0.9  # Adjust to the version you need
 
-      - name: Initialize Terraform
-        working-directory: ${{ github.workspace }}/environment/${{ inputs.environment }}
+      - name: Terraform - Init
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
         run: terraform init
 
-      - name: Terraform Plan
-        working-directory: ${{ github.workspace }}/environment/${{ inputs.environment }}
+      - name: Terraform - Validate
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+        run: terraform validate
+
+      # - name: Terraform - Lint
+      #   working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+      #   run: terraform lint
+
+      - name: Terraform - Plan
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
         run: terraform plan
 
-      - name: Terraform Apply
+      - name: Terraform - Apply
         if: inputs.mode == 'apply'
-        working-directory: ${{ github.workspace }}/environment/${{ inputs.environment }}
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
         run: terraform apply
 
-      - name: Terraform Destroy
+      - name: Terraform - Destroy
         if: inputs.mode == 'destroy'
-        working-directory: ${{ github.workspace }}/environment/${{ inputs.environment }}
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
         run: terraform apply
