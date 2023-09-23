@@ -77,7 +77,8 @@ jobs:
       - name: Terraform - Plan
         id: plan
         working-directory: ${{ env.working-directory }}
-        run: terraform plan -no-color -out=tf.plan
+        run: |
+          terraform plan ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -no-color -out=tf.plan
 
       - uses: trstringer/manual-approval@v1
         if: inputs.mode != 'plan'
@@ -114,11 +115,6 @@ jobs:
             Workflow: `${{ github.workflow }}`
 
       - name: Terraform - Apply
-        if: inputs.mode == 'apply'
+        if: inputs.mode != 'plan'
         working-directory: ${{ env.working-directory }}
-        run: terraform apply -auto-approve tf.plan
-
-      - name: Terraform - Destroy
-        if: inputs.mode == 'destroy'
-        working-directory: ${{ env.working-directory }}
-        run: terraform destroy -auto-approve tf.plan
+        run: terraform apply ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -auto-approve tf.plan
