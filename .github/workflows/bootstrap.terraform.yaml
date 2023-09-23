@@ -87,28 +87,31 @@ jobs:
           minimum-approvals: 1
           issue-title: "Terraform ${{ inputs.mode }} -> Bootstrap (${{ inputs.environment }})"
           issue-body: |
-            #### Terraform Format and Style 🖌\`${{ steps.format.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Format and Style 🖌`${{ steps.format.outcome }}`
+            #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
+            #### Terraform Validation 🤖`${{ steps.validate.outcome }}`
             <details><summary>Validation Output</summary>
       
-            \`\`\`\n
+            ```
             ${{ steps.validate.outputs.stdout }}
-            \`\`\`
+            ```
       
             </details>
       
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            #### Terraform Plan 📖`${{ steps.plan.outcome }}`
       
             <details><summary>Show Plan</summary>
       
-            \`\`\`\n
+            ```diff
             ${{ steps.plan.outputs.stdout }}
-            \`\`\`
+            ```
       
             </details>
       
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*
+            Pusher: @${{ github.actor }}
+            Action: `${{ github.event_name }}`
+            Working Directory: `${{ env.working-directory }}`
+            Workflow: `${{ github.workflow }}`
 
       - name: Terraform - Apply
         if: inputs.mode == 'apply'

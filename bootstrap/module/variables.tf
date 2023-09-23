@@ -1,7 +1,6 @@
 
 variable "key_vault_name" {
   description = "The name of the key vault being created."
-  default = "tfpoc-bootstrap-kv"
 }
 
 variable "region" {
@@ -11,7 +10,6 @@ variable "region" {
 
 variable "resource_group_name" {
   description = "The resource group to create resources within."
-  default = "tfpoc-bootstrap-rg"
 }
 
 variable "tenant_id" {

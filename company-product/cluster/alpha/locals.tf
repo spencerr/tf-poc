@@ -1,8 +1,8 @@
 locals {
-  cluster_name = "tfpoc-alpha-aks"
-  resource_group_name = "tfpoc-cluster-alpha-rg"
+  cluster_name = "aks-alpha-tfpoc"
+  resource_group_name = "rg-alpha-tfpoc-cluster"
   location = "East US"
-  dns_prefix = "tfpoc-alpha-aks"
+  dns_prefix = "aks-alpha-tfpoc"
   node_pool = {
     name       = "default"
     node_count = 1

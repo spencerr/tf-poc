@@ -13,7 +13,6 @@ variable "location" {
 
 variable "dns_prefix" {
   description = "The DNS prefix for the AKS cluster."
-  default     = "tfpoc-aks" # You can change the default or provide it when calling the module
 }
 
 variable "node_pool" {

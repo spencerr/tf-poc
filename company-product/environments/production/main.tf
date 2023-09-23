@@ -1,9 +1,9 @@
 terraform {
   required_version = "~> 1.5.7"
-  
+
   backend "azurerm" {
-    resource_group_name  = "tfpoc-init-prod-rg"
-    storage_account_name = "tfpocinitprodsa"
+    resource_group_name  = "rg-production-tfpoc-init"
+    storage_account_name = "saproductiontfpocinit"
     container_name       = "tfstate"
     key                  = "tfpoc.terraform.tfstate"
     subscription_id      = "8f09f7f4-7b25-4d6f-88a5-847b1751c4ce"
