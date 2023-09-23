@@ -21,7 +21,7 @@ provider "azurerm" {
   features {}
 }
 
-module "aks_cluster" {
+module "bootstrap" {
   source = "../module"
 
   key_vault_name = local.key_vault_name

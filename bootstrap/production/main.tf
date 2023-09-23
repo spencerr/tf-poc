@@ -21,7 +21,7 @@ provider "azurerm" {
   features {}
 }
 
-module "aks_cluster" {
+module "bootstrap" {
   source = "git::https://github.com/spencerr/tf-poc//bootstrap/module/?ref=1.0.0"
 
   key_vault_name = local.key_vault_name

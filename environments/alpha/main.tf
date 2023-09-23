@@ -25,13 +25,6 @@ module "company-product-cluster" {
   source = "../../company-product/cluster/alpha"
 }
 
-provider "kubernetes" {
-  host                   = module.company-product-cluster.kube_config.host
-  client_certificate     = base64decode(module.company-product-cluster.kube_config.client_certificate)
-  client_key             = base64decode(module.company-product-cluster.kube_config.client_key)
-  cluster_ca_certificate = base64decode(module.company-product-cluster.kube_config.cluster_ca_certificate)
-}
-
 module "feature" {
   source = "../../company-product/feature/alpha"
   depends_on = [ module.company-product-cluster ]

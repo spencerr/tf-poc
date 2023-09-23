@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: string
+        type: environment
         default: alpha
       mode:
         type: choice
@@ -23,7 +23,7 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    #environment: ${{ inputs.environment }}   
+    environment: ${{ inputs.environment }}   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -48,9 +48,19 @@ jobs:
         working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
         run: terraform validate
 
-      # - name: Terraform - Lint
-      #   working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
-      #   run: terraform lint
+      - name: TFLint - Setup
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: latest
+
+      - name: TFLint - Init
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: TFLint - Lint
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+        run: tflint -f compact
 
       - name: Terraform - Plan
         working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
