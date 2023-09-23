@@ -12,6 +12,10 @@ variable "resource_group_name" {
   description = "The resource group to create resources within."
 }
 
+variable "tenant_id" {
+  description = "The tenant to create resources within."
+}
+
 variable "subscription_id" {
   description = "The subscription to create resources within."
 }

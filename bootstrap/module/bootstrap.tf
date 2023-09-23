@@ -8,6 +8,7 @@ resource "azurerm_key_vault" "bootstrap" {
   location                    = azurerm_resource_group.bootstrap.location
   resource_group_name         = azurerm_resource_group.bootstrap.name
   sku_name                    = "standard"  # You can use "premium" for a premium SKU
+  tenant_id                   = var.tenant_id
   enabled_for_deployment      = true
   enabled_for_disk_encryption = true
   enabled_for_template_deployment = true
