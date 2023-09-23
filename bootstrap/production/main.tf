@@ -1,4 +1,6 @@
 terraform {
+  required_version = "~> 1.5.7"
+  
   backend "azurerm" {
     resource_group_name  = "tfpoc-start-production-rg"
     storage_account_name = "tfpocstartproductionsa"
