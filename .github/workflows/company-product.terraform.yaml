@@ -26,8 +26,9 @@ env:
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
 permissions:
+  contents: read
   issues: write
-  
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
