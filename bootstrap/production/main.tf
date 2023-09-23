@@ -1,9 +1,9 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "tfpoc-init-alpha-rg"
-    storage_account_name = "tfpocinitalphasa"
+    resource_group_name  = "tfpoc-start-production-rg"
+    storage_account_name = "tfpocstartproductionsa"
     container_name       = "tfstate"
-    key                  = "init.terraform.tfstate"
+    key                  = "start.terraform.tfstate"
     subscription_id      = "8f09f7f4-7b25-4d6f-88a5-847b1751c4ce"
     tenant_id            = "4878e0c1-7017-468b-85f3-3686e1326e53"
   }   
