@@ -8,13 +8,6 @@ module "aks_cluster" {
   node_pool           = local.node_pool
 }
 
-provider "kubernetes" {
-  host                   = module.aks_cluster.kube_config.host
-  client_certificate     = base64decode(module.aks_cluster.kube_config.client_certificate)
-  client_key             = base64decode(module.aks_cluster.kube_config.client_key)
-  cluster_ca_certificate = base64decode(module.aks_cluster.kube_config.cluster_ca_certificate)
-}
-
 output "cluster_name" {
   value = module.aks_cluster.cluster_name
 }

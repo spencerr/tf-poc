@@ -1,0 +1,119 @@
+name: Terraform Apply
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        default: alpha
+      mode:
+        type: choice
+        default: plan
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      working-directory: ${{ github.workspace }}/company-product/environments/${{ inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Terraform - Setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Azure - Login
+        env:
+          AZURE_USER: ${{ secrets.AZURE_USER }}
+          AZURE_PAT: ${{ secrets.AZURE_PAT }}
+          AZURE_TENANT: ${{ secrets.AZURE_TENANT }}
+        run: az login --service-principal --username $AZURE_USER --password $AZURE_PAT --tenant $AZURE_TENANT
+
+      - name: Terraform - Format
+        id: format
+        working-directory: ${{ env.working-directory }}
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform - Init
+        id: init
+        working-directory: ${{ env.working-directory }}
+        run: terraform init
+
+      - name: Terraform - Validate
+        id: validate
+        working-directory: ${{ env.working-directory }}
+        run: terraform validate
+
+      - name: TFLint - Setup
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: latest
+
+      - name: TFLint - Init
+        working-directory: ${{ env.working-directory }}
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: TFLint - Lint
+        id: lint
+        working-directory: ${{ env.working-directory }}
+        run: tflint -f compact
+
+      - name: Terraform - Plan
+        id: plan
+        working-directory: ${{ env.working-directory }}
+        run: terraform plan -no-color
+
+      - uses: trstringer/manual-approval@v1
+        if: inputs.mode != 'plan'
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: spencerr
+          minimum-approvals: 1
+          issue-title: "Terraform ${{ inputs.mode }} -> company-product (${{ inputs.environment }})"
+          issue-body: |
+            #### Terraform Format and Style 🖌\`${{ steps.format.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+      
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+      
+            </details>
+      
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      
+            <details><summary>Show Plan</summary>
+      
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+      
+            </details>
+      
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*
+
+      - name: Terraform - Apply
+        if: inputs.mode == 'apply'
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+        run: terraform apply
+
+      - name: Terraform - Destroy
+        if: inputs.mode == 'destroy'
+        working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+        run: terraform apply

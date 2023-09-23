@@ -3,7 +3,7 @@ terraform {
     resource_group_name  = "tfpoc-init-alpha-rg"
     storage_account_name = "tfpocinitalphasa"
     container_name       = "tfstate"
-    key                  = "init.terraform.tfstate"
+    key                  = "tfpoc.terraform.tfstate"
     subscription_id      = "8f09f7f4-7b25-4d6f-88a5-847b1751c4ce"
     tenant_id            = "4878e0c1-7017-468b-85f3-3686e1326e53"
   }   
@@ -21,12 +21,19 @@ provider "azurerm" {
   features {}
 }
 
-module "bootstrap" {
-  source = "git::https://github.com/spencerr/tf-poc//bootstrap/module/?ref=1.0.0"
+module "cluster" {
+  source = "../../cluster/alpha"
+}
 
-  key_vault_name = local.key_vault_name
-  region = local.region
-  resource_group_name = local.resource_group_name
-  tenant_id = local.tenant_id
-  subscription_id = local.subscription_id
+
+provider "kubernetes" {
+  host                   = module.cluster.kube_config.host
+  client_certificate     = base64decode(module.cluster.kube_config.client_certificate)
+  client_key             = base64decode(module.cluster.kube_config.client_key)
+  cluster_ca_certificate = base64decode(module.cluster.kube_config.cluster_ca_certificate)
+}
+
+module "feature" {
+  source = "../../feature/alpha"
+  depends_on = [ module.cluster ]
 }

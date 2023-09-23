@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
-      working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
+      working-directory: ${{ github.workspace }}/bootstrap/${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -83,7 +83,7 @@ jobs:
           secret: ${{ github.TOKEN }}
           approvers: spencerr
           minimum-approvals: 1
-          issue-title: "Terraform ${{ inputs.mode }} -> ${{ inputs.environment }}"
+          issue-title: "Terraform ${{ inputs.mode }} -> Bootstrap (${{ inputs.environment }})"
           issue-body: |
             #### Terraform Format and Style 🖌\`${{ steps.format.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
