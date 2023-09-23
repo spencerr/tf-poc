@@ -31,7 +31,14 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.9  # Adjust to the version you need
+          terraform_version: 1.0.9
+
+      - name: Azure - Login
+        env:
+          AZURE_USER: ${{ secrets.AZURE_USER }}
+          AZURE_PAT: ${{ secrets.AZURE_PAT }}
+          AZURE_TENANT: ${{ secrets.AZURE_TENANT }}
+        run: az login --service-principal --username $AZURE_USER --password $AZURE_PAT --tenant $AZURE_TENANT
 
       - name: Terraform - Init
         working-directory: ${{ github.workspace }}/environments/${{ inputs.environment }}
