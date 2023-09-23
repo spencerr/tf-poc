@@ -29,6 +29,5 @@ module "bootstrap" {
   key_vault_name = local.key_vault_name
   region = local.region
   resource_group_name = local.resource_group_name
-  tenant_id = local.tenant_id
   subscription_id = local.subscription_id
 }

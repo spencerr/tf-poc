@@ -29,6 +29,7 @@ module "cluster" {
 
 
 provider "kubernetes" {
+  required_version = "~> 2.23.0"
   host                   = module.cluster.kube_config.host
   client_certificate     = base64decode(module.cluster.kube_config.client_certificate)
   client_key             = base64decode(module.cluster.kube_config.client_key)
