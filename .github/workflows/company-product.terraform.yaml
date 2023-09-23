@@ -77,7 +77,7 @@ jobs:
       - name: Terraform - Plan
         id: plan
         working-directory: ${{ env.working-directory }}
-        run: terraform plan -no-color
+        run: terraform plan -no-color -out=tf.plan
 
       - uses: trstringer/manual-approval@v1
         if: inputs.mode != 'plan'
