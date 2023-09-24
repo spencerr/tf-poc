@@ -24,7 +24,7 @@ provider "azurerm" {
 }
 
 module "bootstrap" {
-  source = "git::https://github.com/spencerr/tf-poc//bootstrap/module/?ref=1.0.0"
+  source = "git::https://github.com/spencerr/tf-poc//bootstrap/module/?ref=v1.0.0"
 
   key_vault_name = local.key_vault_name
   region = local.region

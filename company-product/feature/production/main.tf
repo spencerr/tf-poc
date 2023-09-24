@@ -1,5 +1,5 @@
 module "feature" {
-  source = "git::https://github.com/spencerr/tf-poc//company-product/feature/module/?ref=1.0.0"
+  source = "git::https://github.com/spencerr/tf-poc//company-product/feature/module/?ref=v1.0.0"
 
   cosmosdb_name       = local.cosmosdb_name
   region              = local.region
