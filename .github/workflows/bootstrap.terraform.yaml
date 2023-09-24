@@ -43,7 +43,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Github - Configure
-        run: git config --global url."git::https://oauth2:${{ github.token }}@github.com/spencerr/tf-poc".insteadOf "git::https://github.com/spencerr/tf-poc"
+        run: git config --global url."https://oauth2:${{ github.token }}@github.com/spencerr/tf-poc".insteadOf "https://github.com/spencerr/tf-poc"
 
       - name: Terraform - Format
         id: format
