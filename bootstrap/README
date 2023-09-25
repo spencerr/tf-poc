@@ -6,7 +6,6 @@ storage_account_name = "sa${environment}tfpocinit"
 container_name       = "tfstate"
 
 2. Run the bootstrapper to create resources that require manual updates before proceeding to the main deployment.
-### Create Secrets
 In the KeyVault `kv-{environment}-tfpoc-bootstrap` create the following secrets
 - `Test--Secret` - a random value for testing
 
