@@ -1,4 +1,5 @@
 name: Bootstrap -> Terraform
+run-name: Bootstrap -> Terraform ${{ inputs.mode }} (${{ inputs.environment }})
 
 on:
   # push:

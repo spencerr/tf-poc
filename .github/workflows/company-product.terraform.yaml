@@ -1,4 +1,5 @@
 name: Company:Product -> Terraform
+run-name: Company:Product -> Terraform ${{ inputs.mode }} (${{ inputs.environment }})
 
 on:
   # push:
