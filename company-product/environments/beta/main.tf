@@ -40,11 +40,11 @@ provider "kubernetes" {
 }
 
 module "beta_feature" {
-  source = "../../feature/beta"
+  source = "../../domains/feature/beta"
   depends_on = [ module.cluster ]
 }
 
 module "preview_feature" {
-  source = "../../feature/preview"
+  source = "../../domains/feature/preview"
   depends_on = [ module.cluster ]
 }

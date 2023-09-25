@@ -41,6 +41,6 @@ provider "kubernetes" {
 }
 
 module "feature" {
-  source = "../../feature/alpha"
+  source = "../../domains/feature/alpha"
   depends_on = [ module.cluster ]
 }
