@@ -17,9 +17,11 @@ jobs:
         with:
           change_path: "modules"
           prefix: "modules-v"
+          bump_each_commit: true
 
       - name: Company-Product - Version Bump
         uses: paulhatch/semantic-version@v5.2.1
         with:
           change_path: "company-product"
           prefix: "company-product-v"
+          bump_each_commit: true

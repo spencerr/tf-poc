@@ -11,6 +11,7 @@ resource "azurerm_key_vault" "vault" {
   purge_protection_enabled    = true
 }
 
+
 output "vault" {
   value = azurerm_key_vault.vault
 }
