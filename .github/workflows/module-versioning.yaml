@@ -22,7 +22,7 @@ jobs:
 
       - name: Modules - Create tag
         uses: actions/github-script@v5
-        if: steps.modules.outputs.changed != 'true'
+        if: steps.modules.outputs.changed || 'false' == 'true'
         with:
           script: |
             github.rest.git.createRef({
@@ -43,7 +43,7 @@ jobs:
       
       - name: Company-Product - Create tag
         uses: actions/github-script@v5
-        if: steps.company-product.outputs.changed != 'true'
+        if: steps.company-product.outputs.changed || 'false' == 'true'
         with:
           script: |
             github.rest.git.createRef({
