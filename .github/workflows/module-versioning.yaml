@@ -9,8 +9,15 @@ jobs:
     steps:
       - name: Github - Checkout
         uses: actions/checkout@v2
-
-      - name: Bump version and push tag
-        uses: hennejg/github-tag-action@v4.1.jh1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Modules - Version Bump
+        uses: paulhatch/semantic-version@v5.2.3
+        with:
+          change_path: "modules"
+
+      - name: Company-Product - Version Bump
+        uses: paulhatch/semantic-version@v5.2.3
+        with:
+          change_path: "company-product"
