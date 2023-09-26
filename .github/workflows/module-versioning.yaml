@@ -17,7 +17,7 @@ jobs:
         id: modules
         with:
           change_path: "modules"
-          prefix: "modules-v"
+          tag_prefix: "modules-v"
           bump_each_commit: false
 
       - name: Modules - Create tag
@@ -37,7 +37,7 @@ jobs:
         id: company-product
         with:
           change_path: "company-product"
-          prefix: "company-product-v"
+          tag_prefix: "company-product-v"
           bump_each_commit: false
 
       
