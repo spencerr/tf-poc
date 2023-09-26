@@ -19,11 +19,11 @@ resource "azurerm_cosmosdb_account" "feature" {
 }
 
 module "feature_key_vault" {
-  source = "git::https://github.com/spencerr/tf-poc//modules/keyvault/?ref=modules-v0.0.2"
+  source = "git::https://github.com/spencerr/tf-poc//modules/keyvault/?ref=modules-v0.0.3"
 
-  name                = local.key_vault_name
-  location            = local.region
-  resource_group      = azurerm_resource_group.feature
+  name                    = local.key_vault_name
+  location                = local.region
+  resource_group_name     = azurerm_resource_group.feature.name
 }
 
 resource "kubernetes_namespace" "secret_namespace" {
