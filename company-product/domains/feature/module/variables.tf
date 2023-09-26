@@ -17,3 +17,7 @@ variable "secret_namespace" {
 variable "test_secret_key_vault_id" {
   type = string
 }
+
+variable "key_vault_name" {
+  
+}
