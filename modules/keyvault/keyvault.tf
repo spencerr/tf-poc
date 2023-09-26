@@ -1,7 +1,7 @@
 resource "azurerm_key_vault" "vault" {
   name                        = var.name
-  location                    = coalesce(var.resource_group.location, var.resource_group_location)
-  resource_group_name         = coalesce(var.resource_group.name, var.resource_group_name)
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
   sku_name                    = "standard"  # You can use "premium" for a premium SKU
   tenant_id                   = var.tenant_id
   enabled_for_deployment      = true
