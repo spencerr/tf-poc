@@ -1,5 +1,5 @@
 name: Bootstrap -> Terraform
-run-name: Bootstrap -> Terraform ${{ inputs.mode }} (${{ inputs.environment }})
+run-name: Bootstrap -> Terraform ${{ github.env.mode }} (${{ github.env.environment }})
 
 on:
   # push:
@@ -25,6 +25,8 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  mode: ${{ inputs.mode || 'plan' }}
+  environment: ${{ inputs.environment || 'alpha' }}
 
 permissions:
   contents: read
@@ -35,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     #environment: ${{ inputs.environment }}
     env:
-      working-directory: ${{ github.workspace }}/bootstrap/${{ inputs.environment }}
+      working-directory: ${{ github.workspace }}/bootstrap/${{ github.env.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -82,15 +84,15 @@ jobs:
         id: plan
         working-directory: ${{ env.working-directory }}
         run: |
-          terraform plan ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -no-color -out=tf.plan
+          terraform plan ${{ github.env.mode == 'destroy' && '-destroy' || '' }} -no-color -out=tf.plan
 
       - uses: trstringer/manual-approval@v1
-        if: inputs.mode != 'plan'
+        if: github.env.mode != 'plan'
         with:
           secret: ${{ github.TOKEN }}
           approvers: spencerr
           minimum-approvals: 1
-          issue-title: "Terraform ${{ inputs.mode }} -> Bootstrap (${{ inputs.environment }})"
+          issue-title: "Terraform ${{ github.env.mode }} -> Bootstrap (${{ github.env.environment }})"
           issue-body: |
             #### Terraform Format and Style 🖌`${{ steps.format.outcome }}`
             #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
@@ -119,6 +121,6 @@ jobs:
             Workflow: `${{ github.workflow }}`
 
       - name: Terraform - Apply
-        if: inputs.mode != 'plan'
+        if: github.env.mode != 'plan'
         working-directory: ${{ env.working-directory }}
-        run: terraform apply ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -auto-approve tf.plan
+        run: terraform apply ${{ github.env.mode == 'destroy' && '-destroy' || '' }} -auto-approve tf.plan

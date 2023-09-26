@@ -1,5 +1,5 @@
 name: Company:Product -> Terraform
-run-name: Company:Product -> Terraform ${{ inputs.mode }} (${{ inputs.environment }})
+run-name: Company:Product -> Terraform ${{ github.env.mode }} (${{ github.env.environment }})
 
 on:
   # push:
@@ -25,6 +25,8 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  mode: ${{ inputs.mode || 'plan' }}
+  environment: ${{ inputs.environment || 'alpha' }}
 
 permissions:
   contents: read
@@ -33,9 +35,9 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    #environment: ${{ inputs.environment }}
+    #environment: ${{ github.env.environment }}
     env:
-      working-directory: ${{ github.workspace }}/company-product/environments/${{ inputs.environment }}
+      working-directory: ${{ github.workspace }}/company-product/environments/${{ github.env.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -82,15 +84,15 @@ jobs:
         id: plan
         working-directory: ${{ env.working-directory }}
         run: |
-          terraform plan ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -no-color -out=tf.plan
+          terraform plan ${{ github.env.mode == 'destroy' && '-destroy' || '' }} -no-color -out=tf.plan
 
       - uses: trstringer/manual-approval@v1
-        if: inputs.mode != 'plan'
+        if: github.env.mode != 'plan'
         with:
           secret: ${{ github.TOKEN }}
           approvers: spencerr
           minimum-approvals: 1
-          issue-title: "Terraform ${{ inputs.mode }} -> company-product (${{ inputs.environment }})"
+          issue-title: "Terraform ${{ github.env.mode }} -> company-product (${{ github.env.environment }})"
           issue-body: |
             #### Terraform Format and Style 🖌`${{ steps.format.outcome }}`
             #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
@@ -119,6 +121,6 @@ jobs:
             Workflow: `${{ github.workflow }}`
 
       - name: Terraform - Apply
-        if: inputs.mode != 'plan'
+        if: github.env.mode != 'plan'
         working-directory: ${{ env.working-directory }}
-        run: terraform apply ${{ inputs.mode == 'destroy' && '-destroy' || '' }} -auto-approve tf.plan
+        run: terraform apply ${{ github.env.mode == 'destroy' && '-destroy' || '' }} -auto-approve tf.plan
