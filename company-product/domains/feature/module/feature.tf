@@ -24,6 +24,7 @@ module "feature_key_vault" {
   name                    = local.key_vault_name
   location                = local.region
   resource_group_name     = azurerm_resource_group.feature.name
+  tenant_id               = data.azurerm_client_config.current.tenant_id
 }
 
 resource "kubernetes_namespace" "secret_namespace" {
