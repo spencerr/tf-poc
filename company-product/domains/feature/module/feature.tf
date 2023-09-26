@@ -19,7 +19,7 @@ resource "azurerm_cosmosdb_account" "feature" {
 }
 
 module "feature_key_vault" {
-  source = "git::https://github.com/spencerr/tf-poc//company-product/modules/keyvault/?ref=modules-v0.0.2"
+  source = "git::https://github.com/spencerr/tf-poc//modules/keyvault/?ref=modules-v0.0.2"
 
   name                = local.key_vault_name
   location            = local.region

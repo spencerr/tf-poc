@@ -1,5 +1,5 @@
 name: Company:Product -> Terraform
-run-name: Company:Product -> Terraform ${{ inputs.mode || 'alpha' }} (${{ inputs.environment || 'alpha' }})
+run-name: Company:Product -> Terraform ${{ inputs.mode || 'plan' }} (${{ inputs.environment || 'alpha' }})
 
 on:
   # push:
