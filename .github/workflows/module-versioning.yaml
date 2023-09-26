@@ -14,14 +14,41 @@ jobs:
 
       - name: Modules - Version Bump
         uses: paulhatch/semantic-version@v5.2.1
+        id: modules
         with:
           change_path: "modules"
           prefix: "modules-v"
-          bump_each_commit: true
+          bump_each_commit: false
+
+      - name: Modules - Create tag
+        uses: actions/github-script@v5
+        if: steps.modules.outputs.changed != 'true'
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.modules.outputs.version_tag }}',
+              sha: context.sha
+            })
 
       - name: Company-Product - Version Bump
         uses: paulhatch/semantic-version@v5.2.1
+        id: company-product
         with:
           change_path: "company-product"
           prefix: "company-product-v"
-          bump_each_commit: true
+          bump_each_commit: false
+
+      
+      - name: Company-Product - Create tag
+        uses: actions/github-script@v5
+        if: steps.company-product.outputs.changed != 'true'
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.company-product.outputs.version_tag }}',
+              sha: context.sha
+            })
