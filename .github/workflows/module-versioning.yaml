@@ -21,7 +21,7 @@ jobs:
           bump_each_commit: false
 
       - name: Modules - Create tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         if: steps.modules.outputs.changed || 'false' == 'true'
         with:
           script: |
@@ -42,7 +42,7 @@ jobs:
 
       
       - name: Company-Product - Create tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         if: steps.company-product.outputs.changed || 'false' == 'true'
         with:
           script: |
