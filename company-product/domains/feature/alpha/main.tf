@@ -2,6 +2,7 @@ module "feature" {
   source = "../module"
 
   cosmosdb_name       = local.cosmosdb_name
+  key_vault_name      = local.key_vault_name
   region              = local.region
   resource_group_name = local.resource_group_name
   secret_namespace    = local.secret_namespace
