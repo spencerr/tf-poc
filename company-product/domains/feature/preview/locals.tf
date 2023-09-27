@@ -1,5 +1,9 @@
 locals {
-  cosmosdb_name = "cdb-preview-tfpoc-feature"
+  cosmosdb = {
+    enabled = true
+    name = "cos-preview-tfpoc-feature"
+    sku_name = "Standard"
+  }
   key_vault_name = "kv-preview-tfpoc-feature"
   region = "East US"
   resource_group_name = "rg-preview-tfpoc-feature"

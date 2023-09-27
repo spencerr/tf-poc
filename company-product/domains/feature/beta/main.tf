@@ -1,7 +1,7 @@
 module "feature" {
-  source = "git::https://github.com/spencerr/tf-poc//company-product/domains/feature/module/?ref=company-product-v0.0.2"
+  source = "git::https://github.com/spencerr/tf-poc//company-product/domains/feature/module/?ref=company-product-v0.0.7"
 
-  cosmosdb_name       = local.cosmosdb_name
+  cosmosdb            = local.cosmosdb
   key_vault_name      = local.key_vault_name
   region              = local.region
   resource_group_name = local.resource_group_name
