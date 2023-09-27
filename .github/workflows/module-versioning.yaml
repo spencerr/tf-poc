@@ -36,7 +36,7 @@ jobs:
         uses: paulhatch/semantic-version@v5.2.1
         id: company-product
         with:
-          change_path: "company-product"
+          change_path: "company-product/**/module"
           tag_prefix: "company-product-v"
           bump_each_commit: false
 
