@@ -13,8 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: string
-        default: alpha
+        type: environment
       mode:
         type: choice
         default: plan
@@ -35,7 +34,7 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    #environment: ${{ inputs.environment || 'alpha' }}
+    environment: ${{ inputs.environment || 'alpha' }}
     env:
       working-directory: ${{ github.workspace }}/company-product/environments/${{ inputs.environment || 'alpha' }}
       mode: ${{ inputs.mode || 'plan' }}

@@ -1,5 +1,5 @@
 module "aks_cluster" {
-  source = "git::https://github.com/spencerr/tf-poc//company-product/cluster/module/?ref=v1.0.0"
+  source = "../module"
 
   resource_group_name = local.resource_group_name
   cluster_name        = local.cluster_name
