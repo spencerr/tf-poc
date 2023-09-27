@@ -38,8 +38,8 @@ jobs:
           directories: ${{ steps.changed-files-yaml.outputs.bootstrap_all_modified_files }}
         with:
           script: |
-            const { directories } = process.env
-            console.log(directories)
+            let { directories } = process.env
+            directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
@@ -63,16 +63,14 @@ jobs:
           directories: ${{ steps.changed-files-yaml.outputs.company-product_all_modified_files }}
         with:
           script: |
-            const { directories } = process.env
-            console.log(directories)
+            let { directories } = process.env
+            directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
             for (let dir of directories) {
-              console.log(dir)
               for (let env of environments) {
-                console.log(dir + ' ' + env)
                 if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
