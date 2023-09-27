@@ -47,6 +47,7 @@ jobs:
             for (let dir of directories) {
               if (dir.includes(`/module`)) {
                 affectedEnvironments.add('sandbox')
+                affectedEnvironments.add('alpha')
                 continue
               }
 
@@ -77,6 +78,7 @@ jobs:
             for (let dir of directories) {
               if (dir.includes(`/module`)) {
                 affectedEnvironments.add('sandbox')
+                affectedEnvironments.add('alpha')
                 continue
               }
 
