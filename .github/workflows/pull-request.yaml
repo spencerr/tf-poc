@@ -70,7 +70,9 @@ jobs:
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
             for (let dir of directories) {
+              console.log(dir)
               for (let env of environments) {
+                console.log(dir + ' ' + env)
                 if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
