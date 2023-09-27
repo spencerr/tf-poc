@@ -143,6 +143,17 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: tflint -f compact
 
+      - name: TF Sec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          format: sarif
+          github_token: ${{ github.token }}
+
+      - name: CodeQL - Update sarif
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: tfsec.sarif    
+
       - name: Terraform - Plan
         id: plan
         working-directory: ${{ env.working-directory }}
@@ -204,6 +215,17 @@ jobs:
         id: lint
         working-directory: ${{ env.working-directory }}
         run: tflint -f compact
+
+      - name: TF Sec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          format: sarif
+          github_token: ${{ github.token }}
+
+      - name: CodeQL - Update sarif
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: tfsec.sarif    
 
       - name: Terraform - Plan
         id: plan
