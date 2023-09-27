@@ -25,6 +25,12 @@ variable "redis" {
     name = string
     sku_name = string
   })
+  default = {
+    capacity = 0
+    enabled = false
+    name = ""
+    sku_name = ""
+  }
 }
 
 variable "cosmosdb" {
@@ -33,4 +39,9 @@ variable "cosmosdb" {
     name = string
     sku_name = string
   })
+  default = {
+    enabled = false
+    name = ""
+    sku_name = ""
+  }
 }
