@@ -5,11 +5,11 @@ on:
   # push:
   #   branches:
   #     - main
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'bootstrap/**'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'bootstrap/**'
   workflow_dispatch:
     inputs:
       environment:
