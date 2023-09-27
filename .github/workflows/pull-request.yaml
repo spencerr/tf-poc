@@ -49,6 +49,7 @@ jobs:
               }
             }
 
+            console.log(affectedEnvironments)
             core.setOutput('affectedEnvironments', affectedEnvironments)
 
       - name: Git - Determine Company-Product Affected Environments
@@ -72,6 +73,7 @@ jobs:
               }
             }
 
+            console.log(affectedEnvironments)
             core.setOutput('affectedEnvironments', affectedEnvironments)
               
 
