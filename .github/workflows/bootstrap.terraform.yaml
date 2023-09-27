@@ -34,7 +34,7 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'alpha' }}
     env:
       working-directory: ${{ github.workspace }}/bootstrap/${{ inputs.environment || 'alpha' }}
       mode: ${{ inputs.mode || 'plan' }}
