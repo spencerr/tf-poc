@@ -8,7 +8,7 @@ locals {
     capacity = 2
     enabled = true
     name = "rc-sandbox-tfpoc-feature"
-    sku = "Standard"
+    sku_name = "Standard"
   }
   cosmosdb = {
     enabled = false
