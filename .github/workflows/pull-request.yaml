@@ -22,6 +22,7 @@ jobs:
         id: changed-files-yaml
         uses: tj-actions/changed-files@v39
         with:
+          json: "true"
           files_yaml: |
             bootstrap:
               - bootstrap/**
