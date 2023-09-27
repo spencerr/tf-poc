@@ -36,12 +36,11 @@ resource "azurerm_redis_cache" "feature" {
 }
 
 module "feature_key_vault" {
-  source = "git::https://github.com/spencerr/tf-poc//modules/keyvault/?ref=modules-v0.0.3"
+  source = "git::https://github.com/spencerr/tf-poc//modules/keyvault/?ref=modules-v0.0.5"
 
   name                    = var.key_vault_name
   location                = var.region
   resource_group_name     = azurerm_resource_group.feature.name
-  tenant_id               = data.azurerm_client_config.current.tenant_id
 }
 
 resource "kubernetes_namespace" "secret_namespace" {
