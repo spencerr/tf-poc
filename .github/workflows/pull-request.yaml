@@ -1,0 +1,197 @@
+name: Pull Request Validate
+on:
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    outputs:
+      bootstrap-affected: ${{ steps.bootstrap-affected.outputs.affectedEnvironments }}
+      company-product-affected: ${{ steps.company-product-affected.outputs.affectedEnvironments }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Git - Check Changed Files
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v39
+        with:
+          files_yaml: |
+            bootstrap:
+              - bootstrap/**
+            company-product:
+              - company-product/**
+
+      - name: Git - Determine Bootstrap Affected Environments
+        id: bootstrap-affected
+        uses: actions/github-script@v6
+        env:
+          directories: ${{ steps.changed-files-yaml.outputs.bootstrap_all_modified_files }}
+        with:
+          script: |
+            const { directories } = process.env
+
+            const affectedEnvironments = new Set();
+            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+
+            for (let dir in directories) {
+              for (let env in environments) {
+                if (dir.startswith(`bootstrap/${env}`)) {
+                  affectedEnvironments.add(env)
+                  break
+                }
+              }
+            }
+
+            core.setOutput('affectedEnvironments', affectedEnvironments)
+
+      - name: Git - Determine Company-Product Affected Environments
+        id: company-product-affected
+        uses: actions/github-script@v6
+        env:
+          directories: ${{ steps.changed-files-yaml.outputs.company-product_all_modified_files }}
+        with:
+          script: |
+            const { directories } = process.env
+
+            const affectedEnvironments = new Set();
+            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+
+            for (let dir in directories) {
+              for (let env in environments) {
+                if (dir.startswith(`bootstrap/${env}`)) {
+                  affectedEnvironments.add(env)
+                  break
+                }
+              }
+            }
+
+            core.setOutput('affectedEnvironments', affectedEnvironments)
+              
+
+  bootstrap-terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ${{ needs.evaluate.outputs.bootstrap-affected }}
+    needs: [evaluate]
+    environment: ${{ matrix.environment }}
+    env:
+      working-directory: ${{ github.workspace }}/bootstrap/${{ matrix.environment }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Github - Configure
+        run: git config --global url."https://oauth2:${{ github.token }}@github.com/spencerr/tf-poc".insteadOf "https://github.com/spencerr/tf-poc"
+
+      - name: Terraform - Setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform - Format
+        id: format
+        working-directory: ${{ env.working-directory }}
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform - Init
+        id: init
+        working-directory: ${{ env.working-directory }}
+        run: terraform init
+
+      - name: Terraform - Validate
+        id: validate
+        working-directory: ${{ env.working-directory }}
+        run: terraform validate
+
+      - name: TFLint - Setup
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: latest
+
+      - name: TFLint - Init
+        working-directory: ${{ env.working-directory }}
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: TFLint - Lint
+        id: lint
+        working-directory: ${{ env.working-directory }}
+        run: tflint -f compact
+
+      - name: Terraform - Plan
+        id: plan
+        working-directory: ${{ env.working-directory }}
+        run: terraform plan -no-color -out=tf.plan
+
+
+  company-product-terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ${{ needs.evaluate.outputs.company-product-affected }}
+    needs: [evaluate]
+    environment: ${{ matrix.environment }}
+    env:
+      working-directory: ${{ github.workspace }}/company-product/environments/${{ matrix.environment }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Github - Configure
+        run: git config --global url."https://oauth2:${{ github.token }}@github.com/spencerr/tf-poc".insteadOf "https://github.com/spencerr/tf-poc"
+
+      - name: Terraform - Setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform - Format
+        id: format
+        working-directory: ${{ env.working-directory }}
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform - Init
+        id: init
+        working-directory: ${{ env.working-directory }}
+        run: terraform init
+
+      - name: Terraform - Validate
+        id: validate
+        working-directory: ${{ env.working-directory }}
+        run: terraform validate
+
+      - name: TFLint - Setup
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: latest
+
+      - name: TFLint - Init
+        working-directory: ${{ env.working-directory }}
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: TFLint - Lint
+        id: lint
+        working-directory: ${{ env.working-directory }}
+        run: tflint -f compact
+
+      - name: Terraform - Plan
+        id: plan
+        working-directory: ${{ env.working-directory }}
+        run: terraform plan -no-color -out=tf.plan
