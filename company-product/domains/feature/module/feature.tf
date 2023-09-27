@@ -22,8 +22,8 @@ resource "azurerm_cosmosdb_account" "feature" {
 resource "azurerm_redis_cache" "feature" {
   count               = var.redis.enabled ? 1 : 0
   name                = var.redis.name
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.feature.location
+  resource_group_name = azurerm_resource_group.feature.name
   capacity            = var.capacity
   family              = var.redis.sku_name == "Premium" ? "P" : "C"
   sku_name            = var.redis_sku_name
