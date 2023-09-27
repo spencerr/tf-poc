@@ -45,7 +45,7 @@ jobs:
             const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
             for (let dir of directories) {
-              for (let env of environments) {.
+              for (let env of environments) {
                 if (dir.includes(`/module`)) {
                   affectedEnvironments.add('sandbox')
                   break
