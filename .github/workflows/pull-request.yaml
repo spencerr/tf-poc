@@ -39,12 +39,11 @@ jobs:
         with:
           script: |
             const { directories } = process.env
-            const dirs = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
-            for (let dir in dirs) {
+            for (let dir in directories) {
               for (let env in environments) {
                 if (dir.startsWith(`bootstrap/${env}`)) {
                   affectedEnvironments.add(env)
@@ -64,12 +63,11 @@ jobs:
         with:
           script: |
             const { directories } = process.env
-            const dirs = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
-            for (let dir in dirs) {
+            for (let dir in directories) {
               for (let env in environments) {
                 if (dir.startsWith(`bootstrap/${env}`)) {
                   affectedEnvironments.add(env)
