@@ -14,6 +14,10 @@ variable "secret_namespace" {
   type = string
 }
 
+variable "storage_account_name" {
+  type = string
+}
+
 variable "test_secret_key_vault_id" {
   type = string
 }

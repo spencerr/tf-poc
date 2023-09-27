@@ -60,7 +60,22 @@ resource "kubernetes_secret" "cosmosdb-secret" {
     REDIS_CONNECTION_STRING = try(azurerm_redis_cache.feature.0.primary_connection_string, "")
     TEST_SECRET = data.azurerm_key_vault_secret.test_secret.value
     KEY_VAULT_CONNECTION_STRING = module.feature_key_vault.vault.vault_uri
+    STORAGE_ACCOUNT_CONNECTION_STRING = azurerm_storage_account.feature.primary_connection_string
   }
 
   depends_on = [ kubernetes_namespace.secret_namespace ]
+}
+
+resource "azurerm_storage_account" "feature" {
+  name                = var.storage_account_name
+  resource_group_name = azurerm_resource_group.feature.name
+  location            = azurerm_resource_group.feature.location
+  account_tier        = "Standard"
+  account_replication_type = "GRS"
+}
+
+resource "azurerm_storage_container" "feature" {
+  name = "documents"
+  storage_account_name = azurerm_storage_account.feature.name
+  container_access_type = "private"
 }
