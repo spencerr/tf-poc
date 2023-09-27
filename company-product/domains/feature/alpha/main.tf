@@ -1,5 +1,5 @@
 module "feature" {
-  source = "git::https://github.com/spencerr/tf-poc//company-product/domains/feature/module/?ref=company-product-v0.0.7"
+  source = "../module"
 
   key_vault_name      = local.key_vault_name
   redis               = local.redis
