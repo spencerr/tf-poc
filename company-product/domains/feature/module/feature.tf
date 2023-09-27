@@ -57,8 +57,8 @@ resource "kubernetes_secret" "cosmosdb-secret" {
   }
 
   data = {
-    COSMOSDB_CONNECTION_STRING = coalesce(azurerm_cosmosdb_account.feature.primary_sql_connection_string, "")
-    REDIS_CONNECTION_STRING = coalesce(azurerm_redis_cache.feature.primary_connection_string, "")
+    COSMOSDB_CONNECTION_STRING = coalesce(azurerm_cosmosdb_account.feature.0.primary_sql_connection_string, "")
+    REDIS_CONNECTION_STRING = coalesce(azurerm_redis_cache.feature.0.primary_connection_string, "")
     TEST_SECRET = data.azurerm_key_vault_secret.test_secret.value
     KEY_VAULT_CONNECTION_STRING = module.feature_key_vault.vault.vault_uri
   }
