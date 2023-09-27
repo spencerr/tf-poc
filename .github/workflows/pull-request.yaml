@@ -24,7 +24,7 @@ jobs:
         with:
           json: true
           dir_names: true
-          json_raw_format: true
+          escape_json: false
           files_yaml: |
             bootstrap:
               - bootstrap/**
@@ -65,7 +65,7 @@ jobs:
           script: |
             const { directories } = process.env
             console.log(directories)
-            
+
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
