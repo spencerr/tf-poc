@@ -45,12 +45,12 @@ jobs:
             const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
             for (let dir of directories) {
-              for (let env of environments) {
-                if (dir.includes(`/module`)) {
-                  affectedEnvironments.add('sandbox')
-                  break
-                }
+              if (dir.includes(`/module`)) {
+                affectedEnvironments.add('sandbox')
+                continue
+              }
 
+              for (let env of environments) {
                 if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
@@ -75,17 +75,17 @@ jobs:
             const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
             for (let dir of directories) {
+              if (dir.includes(`/module`)) {
+                affectedEnvironments.add('sandbox')
+                continue
+              }
+
+              if (dir.includes(`/preview`)) {
+                affectedEnvironments.add('beta')
+                continue
+              }
+
               for (let env of environments) {
-                if (dir.includes(`/module`)) {
-                  affectedEnvironments.add('sandbox')
-                  break
-                }
-
-                if (dir.includes(`/preview`)) {
-                  affectedEnvironments.add('beta')
-                  break
-                }
-
                 if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
