@@ -42,7 +42,7 @@ jobs:
 
             for (let dir in directories) {
               for (let env in environments) {
-                if (dir.startswith(`bootstrap/${env}`)) {
+                if (dir.startsWith(`bootstrap/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
@@ -65,7 +65,7 @@ jobs:
 
             for (let dir in directories) {
               for (let env in environments) {
-                if (dir.startswith(`bootstrap/${env}`)) {
+                if (dir.startsWith(`bootstrap/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
