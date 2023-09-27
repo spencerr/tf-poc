@@ -24,9 +24,9 @@ resource "azurerm_redis_cache" "feature" {
   name                = var.redis.name
   location            = azurerm_resource_group.feature.location
   resource_group_name = azurerm_resource_group.feature.name
-  capacity            = var.capacity
+  capacity            = var.redis.capacity
   family              = var.redis.sku_name == "Premium" ? "P" : "C"
-  sku_name            = var.redis_sku_name
+  sku_name            = var.redis.sku_name
   enable_non_ssl_port = false
   minimum_tls_version = "1.2"
 
