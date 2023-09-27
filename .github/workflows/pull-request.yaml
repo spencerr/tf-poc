@@ -108,6 +108,7 @@ jobs:
         environment: ${{ fromJson(needs.evaluate.outputs.bootstrap-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
+    concurrency: bootstrap-${{ matrix.environment }}
     env:
       working-directory: ${{ github.workspace }}/bootstrap/${{ matrix.environment }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -171,6 +172,7 @@ jobs:
         environment: ${{ fromJson(needs.evaluate.outputs.company-product-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
+    concurrency: company-product-${{ matrix.environment }}
     env:
       working-directory: ${{ github.workspace }}/company-product/environments/${{ matrix.environment }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
