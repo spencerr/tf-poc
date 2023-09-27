@@ -2,11 +2,6 @@ name: Bootstrap -> Terraform
 run-name: Bootstrap -> Terraform ${{ inputs.mode || 'plan' }} (${{ inputs.environment || 'alpha' }})
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'bootstrap/**'
   workflow_dispatch:
     inputs:
       environment:

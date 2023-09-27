@@ -1,4 +1,4 @@
-name: Pull Request Validate
+name: Terraform - Deployment
 on:
   push:
     branches:
@@ -6,8 +6,10 @@ on:
     paths:
       - 'bootstrap/**'
       - 'company-product/**'
+
 permissions:
   contents: read
+  issues: write
 
 jobs:
   evaluate:
