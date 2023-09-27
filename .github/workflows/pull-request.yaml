@@ -22,6 +22,9 @@ jobs:
         id: changed-files-yaml
         uses: tj-actions/changed-files@v39
         with:
+          json: true
+          dir_names: true
+          escape_json: false
           files_yaml: |
             bootstrap:
               - bootstrap/**
@@ -35,21 +38,23 @@ jobs:
           directories: ${{ steps.changed-files-yaml.outputs.bootstrap_all_modified_files }}
         with:
           script: |
-            const { directories } = process.env
+            let { directories } = process.env
+            directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
-            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+            const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
-            for (let dir in directories) {
-              for (let env in environments) {
-                if (dir.startswith(`bootstrap/${env}`)) {
+            for (let dir of directories) {
+              for (let env of environments) {
+                if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
               }
             }
 
-            core.setOutput('affectedEnvironments', affectedEnvironments)
+            console.log(affectedEnvironments)
+            core.setOutput('affectedEnvironments', JSON.stringify(Array.from(affectedEnvironments)))
 
       - name: Git - Determine Company-Product Affected Environments
         id: company-product-affected
@@ -58,28 +63,36 @@ jobs:
           directories: ${{ steps.changed-files-yaml.outputs.company-product_all_modified_files }}
         with:
           script: |
-            const { directories } = process.env
+            let { directories } = process.env
+            directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
-            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+            const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
-            for (let dir in directories) {
-              for (let env in environments) {
-                if (dir.startswith(`bootstrap/${env}`)) {
+            for (let dir of directories) {
+              for (let env of environments) {
+                if (dir.includes(`/preview`)) {
+                  affectedEnvironments.add('beta')
+                  break
+                }
+
+                if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
               }
             }
 
-            core.setOutput('affectedEnvironments', affectedEnvironments)
+            console.log(affectedEnvironments)
+            core.setOutput('affectedEnvironments', JSON.stringify(Array.from(affectedEnvironments)))
               
 
   bootstrap-terraform:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        environment: ${{ needs.evaluate.outputs.bootstrap-affected }}
+        environment: ${{ fromJson(needs.evaluate.outputs.bootstrap-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
     env:
@@ -139,8 +152,9 @@ jobs:
   company-product-terraform:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        environment: ${{ needs.evaluate.outputs.company-product-affected }}
+        environment: ${{ fromJson(needs.evaluate.outputs.company-product-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
     env:
@@ -189,7 +203,7 @@ jobs:
       - name: TFLint - Lint
         id: lint
         working-directory: ${{ env.working-directory }}
-        run: tflint -f compact
+        run: tflint -f compact 
 
       - name: Terraform - Plan
         id: plan

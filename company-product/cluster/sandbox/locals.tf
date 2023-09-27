@@ -1,8 +1,8 @@
 locals {
-  cluster_name = "aks-tfpoc"
-  resource_group_name = "rg-tfpoc-cluster"
+  cluster_name = "aks-sandbox-tfpoc"
+  resource_group_name = "rg-sandbox-tfpoc-cluster"
   location = "East US"
-  dns_prefix = "aks-tfpoc"
+  dns_prefix = "aks-sandbox-tfpoc"
   node_pool = {
     name       = "default"
     node_count = 1

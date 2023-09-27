@@ -4,10 +4,11 @@ resource "azurerm_resource_group" "feature" {
 }
 
 resource "azurerm_cosmosdb_account" "feature" {
-  name                = var.cosmosdb_name
+  count               = var.cosmosdb.enabled ? 1 : 0
+  name                = var.cosmosdb.name
   location            = azurerm_resource_group.feature.location
   resource_group_name = azurerm_resource_group.feature.name
-  offer_type          = "Standard"
+  offer_type          = var.cosmosdb.sku_name
   kind                = "GlobalDocumentDB"
   consistency_policy {
     consistency_level = "Session"
@@ -15,6 +16,22 @@ resource "azurerm_cosmosdb_account" "feature" {
   geo_location {
     location          = azurerm_resource_group.feature.location
     failover_priority = 0
+  }
+}
+
+resource "azurerm_redis_cache" "feature" {
+  count               = var.redis.enabled ? 1 : 0
+  name                = var.redis.name
+  location            = azurerm_resource_group.feature.location
+  resource_group_name = azurerm_resource_group.feature.name
+  capacity            = var.redis.capacity
+  family              = var.redis.sku_name == "Premium" ? "P" : "C"
+  sku_name            = var.redis.sku_name
+  enable_non_ssl_port = false
+  minimum_tls_version = "1.2"
+
+  redis_configuration {
+
   }
 }
 
@@ -40,7 +57,8 @@ resource "kubernetes_secret" "cosmosdb-secret" {
   }
 
   data = {
-    CONNECTION_STRING = azurerm_cosmosdb_account.feature.primary_sql_connection_string
+    COSMOSDB_CONNECTION_STRING = try(azurerm_cosmosdb_account.feature.0.primary_sql_connection_string, "")
+    REDIS_CONNECTION_STRING = try(azurerm_redis_cache.feature.0.primary_connection_string, "")
     TEST_SECRET = data.azurerm_key_vault_secret.test_secret.value
     KEY_VAULT_CONNECTION_STRING = module.feature_key_vault.vault.vault_uri
   }

@@ -1,12 +1,12 @@
-variable "resource_group_name" {
-  
+variable "key_vault_name" {
+  type = string
 }
 
 variable "region" {
-  
+  type = string
 }
 
-variable "cosmosdb_name" {
+variable "resource_group_name" {
   type = string
 }
 
@@ -18,6 +18,19 @@ variable "test_secret_key_vault_id" {
   type = string
 }
 
-variable "key_vault_name" {
-  
+variable "redis" {
+  type = object({
+    capacity = number
+    enabled = bool
+    name = string
+    sku_name = string
+  })
+}
+
+variable "cosmosdb" {
+  type = object({
+    enabled = bool
+    name = string
+    sku_name = string
+  })
 }
