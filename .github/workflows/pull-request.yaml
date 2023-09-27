@@ -99,6 +99,7 @@ jobs:
 
   bootstrap-terraform:
     runs-on: ubuntu-latest
+    if: needs.evaluate.outputs.bootstrap-affected != '' && needs.evaluate.outputs.bootstrap-affected != '[]'
     strategy:
       fail-fast: false
       matrix:
@@ -161,6 +162,7 @@ jobs:
 
   company-product-terraform:
     runs-on: ubuntu-latest
+    if: needs.evaluate.outputs.company-product-affected != '' && needs.evaluate.outputs.company-product-affected != '[]'
     strategy:
       fail-fast: false
       matrix:
