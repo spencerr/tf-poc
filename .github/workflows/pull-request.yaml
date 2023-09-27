@@ -46,7 +46,7 @@ jobs:
 
             for (let dir of directories) {
               for (let env of environments) {
-                if (dir.contains(`/${env}`)) {
+                if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
@@ -71,7 +71,7 @@ jobs:
 
             for (let dir of directories) {
               for (let env of environments) {
-                if (dir.contains(`/${env}`)) {
+                if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
                 }
