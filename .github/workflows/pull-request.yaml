@@ -112,7 +112,9 @@ jobs:
         environment: ${{ fromJson(needs.evaluate.outputs.bootstrap-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
-    concurrency: bootstrap-${{ matrix.environment }}
+    concurrency: 
+      group: ${{ github.workflow }}-${{ github.ref }}-bootstrap-${{ matrix.environment }}
+      cancel-in-progress: true
     env:
       working-directory: ${{ github.workspace }}/bootstrap/${{ matrix.environment }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -164,7 +166,7 @@ jobs:
       - name: Terraform - Plan
         id: plan
         working-directory: ${{ env.working-directory }}
-        run: terraform plan -no-color -out=tf.plan
+        run: terraform plan -no-color -out=tf.plan -lock=false
 
 
   company-product-terraform:
@@ -176,7 +178,9 @@ jobs:
         environment: ${{ fromJson(needs.evaluate.outputs.company-product-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
-    concurrency: company-product-${{ matrix.environment }}
+    concurrency: 
+      group: ${{ github.workflow }}-${{ github.ref }}-company-product-${{ matrix.environment }}
+      cancel-in-progress: true
     env:
       working-directory: ${{ github.workspace }}/company-product/environments/${{ matrix.environment }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -228,4 +232,4 @@ jobs:
       - name: Terraform - Plan
         id: plan
         working-directory: ${{ env.working-directory }}
-        run: terraform plan -no-color -out=tf.plan
+        run: terraform plan -no-color -out=tf.plan -lock=false
