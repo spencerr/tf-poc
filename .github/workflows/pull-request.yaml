@@ -54,7 +54,7 @@ jobs:
             }
 
             console.log(affectedEnvironments)
-            core.setOutput('affectedEnvironments', JSON.stringify(affectedEnvironments))
+            core.setOutput('affectedEnvironments', JSON.stringify(Array.from(affectedEnvironments)))
 
       - name: Git - Determine Company-Product Affected Environments
         id: company-product-affected
@@ -79,7 +79,7 @@ jobs:
             }
 
             console.log(affectedEnvironments)
-            core.setOutput('affectedEnvironments', JSON.stringify(affectedEnvironments))
+            core.setOutput('affectedEnvironments', JSON.stringify(Array.from(affectedEnvironments)))
               
 
   bootstrap-terraform:
