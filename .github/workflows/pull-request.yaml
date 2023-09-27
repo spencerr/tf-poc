@@ -42,7 +42,7 @@ jobs:
             directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
-            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+            const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
             for (let dir of directories) {
               for (let env of environments) {
@@ -67,10 +67,15 @@ jobs:
             directories = JSON.parse(directories)
 
             const affectedEnvironments = new Set();
-            const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
+            const environments = ['sandbox', 'alpha', 'beta', 'production'];
 
             for (let dir of directories) {
               for (let env of environments) {
+                if (dir.includes(`/preview`)) {
+                  affectedEnvironments.add('beta')
+                  break
+                }
+
                 if (dir.includes(`/${env}`)) {
                   affectedEnvironments.add(env)
                   break
