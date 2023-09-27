@@ -1,8 +1,8 @@
 locals {
-  cluster_name = "aks-production-tfpoc"
-  resource_group_name = "rg-production-tfpoc-cluster"
+  cluster_name = "aks-tfpoc"
+  resource_group_name = "rg-tfpoc-cluster"
   location = "East US"
-  dns_prefix = "aks-production-tfpoc"
+  dns_prefix = "aks-tfpoc"
   node_pool = {
     name       = "default"
     node_count = 1
