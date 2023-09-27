@@ -37,6 +37,8 @@ jobs:
           script: |
             const { directories } = process.env
 
+            console.log(directories);
+
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
@@ -50,7 +52,7 @@ jobs:
             }
 
             console.log(affectedEnvironments)
-            core.setOutput('affectedEnvironments', affectedEnvironments)
+            core.setOutput('affectedEnvironments', JSON.stringify(affectedEnvironments))
 
       - name: Git - Determine Company-Product Affected Environments
         id: company-product-affected
@@ -61,6 +63,8 @@ jobs:
           script: |
             const { directories } = process.env
 
+            console.log(directories);
+
             const affectedEnvironments = new Set();
             const environments = ['sandbox', 'alpha', 'beta', 'preview', 'production'];
 
@@ -74,14 +78,14 @@ jobs:
             }
 
             console.log(affectedEnvironments)
-            core.setOutput('affectedEnvironments', affectedEnvironments)
+            core.setOutput('affectedEnvironments', JSON.stringify(affectedEnvironments))
               
 
   bootstrap-terraform:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: ${{ needs.evaluate.outputs.bootstrap-affected }}
+        environment: ${{ fromJson(needs.evaluate.outputs.bootstrap-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
     env:
@@ -142,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: ${{ needs.evaluate.outputs.company-product-affected }}
+        environment: ${{ fromJson(needs.evaluate.outputs.company-product-affected) }}
     needs: [evaluate]
     environment: ${{ matrix.environment }}
     env:
