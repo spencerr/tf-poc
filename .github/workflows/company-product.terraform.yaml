@@ -2,14 +2,11 @@ name: Company:Product -> Terraform
 run-name: Company:Product -> Terraform ${{ inputs.mode || 'plan' }} (${{ inputs.environment || 'alpha' }})
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'company-product/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'company-product/**'
   workflow_dispatch:
     inputs:
       environment:
@@ -35,6 +32,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || 'alpha' }}
+    concurrency: company-product-${{ inputs.environment }}
     env:
       working-directory: ${{ github.workspace }}/company-product/environments/${{ inputs.environment || 'alpha' }}
       mode: ${{ inputs.mode || 'plan' }}

@@ -2,14 +2,11 @@ name: Bootstrap -> Terraform
 run-name: Bootstrap -> Terraform ${{ inputs.mode || 'plan' }} (${{ inputs.environment || 'alpha' }})
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'bootstrap/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'bootstrap/**'
   workflow_dispatch:
     inputs:
       environment:
@@ -35,6 +32,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || 'alpha' }}
+    concurrency: bootstrap-${{ inputs.environment }}
     env:
       working-directory: ${{ github.workspace }}/bootstrap/${{ inputs.environment || 'alpha' }}
       mode: ${{ inputs.mode || 'plan' }}
