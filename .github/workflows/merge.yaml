@@ -1,8 +1,11 @@
 name: Pull Request Validate
 on:
-  pull_request:
+  push:
     branches:
       - main
+    paths:
+      - 'bootstrap/**'
+      - 'company-product/**'
 permissions:
   contents: read
 
@@ -161,6 +164,43 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: terraform plan -no-color -out=tf.plan
 
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: spencerr
+          minimum-approvals: 1
+          issue-title: "Terraform apply -> bootstrap (${{ matrix.environment }})"
+          issue-body: |
+            #### Terraform Format and Style 🖌`${{ steps.format.outcome }}`
+            #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
+            #### Terraform Validation 🤖`${{ steps.validate.outcome }}`
+            <details><summary>Validation Output</summary>
+      
+            ```
+            ${{ steps.validate.outputs.stdout }}
+            ```
+      
+            </details>
+      
+            #### Terraform Plan 📖`${{ steps.plan.outcome }}`
+      
+            <details><summary>Show Plan</summary>
+      
+            ```diff
+            ${{ steps.plan.outputs.stdout }}
+            ```
+      
+            </details>
+      
+            Pusher: @${{ github.actor }}
+            Action: `${{ github.event_name }}`
+            Working Directory: `${{ env.working-directory }}`
+            Workflow: `${{ github.workflow }}`
+
+      - name: Terraform - Apply
+        working-directory: ${{ env.working-directory }}
+        run: terraform apply -auto-approve tf.plan
+
 
   company-product-terraform:
     runs-on: ubuntu-latest
@@ -224,3 +264,40 @@ jobs:
         id: plan
         working-directory: ${{ env.working-directory }}
         run: terraform plan -no-color -out=tf.plan
+
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: spencerr
+          minimum-approvals: 1
+          issue-title: "Terraform apply -> company-product (${{ matrix.environment }})"
+          issue-body: |
+            #### Terraform Format and Style 🖌`${{ steps.format.outcome }}`
+            #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
+            #### Terraform Validation 🤖`${{ steps.validate.outcome }}`
+            <details><summary>Validation Output</summary>
+      
+            ```
+            ${{ steps.validate.outputs.stdout }}
+            ```
+      
+            </details>
+      
+            #### Terraform Plan 📖`${{ steps.plan.outcome }}`
+      
+            <details><summary>Show Plan</summary>
+      
+            ```diff
+            ${{ steps.plan.outputs.stdout }}
+            ```
+      
+            </details>
+      
+            Pusher: @${{ github.actor }}
+            Action: `${{ github.event_name }}`
+            Working Directory: `${{ env.working-directory }}`
+            Workflow: `${{ github.workflow }}`
+
+      - name: Terraform - Apply
+        working-directory: ${{ env.working-directory }}
+        run: terraform apply -auto-approve tf.plan
