@@ -81,7 +81,7 @@ resource "azurerm_storage_container" "feature" {
 }
 
 module "feature_app_insights" {
-  source = "../../../../modules/application-insights"
+  source = "git::https://github.com/spencerr/tf-poc//modules/application-insights/?ref=modules-v0.0.6"
 
   name = var.app_insights.name
   resource_group_name = azurerm_resource_group.feature.name
