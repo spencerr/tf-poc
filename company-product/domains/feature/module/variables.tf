@@ -49,3 +49,11 @@ variable "cosmosdb" {
     sku_name = ""
   }
 }
+
+variable "app_insights" {
+  type = object({
+    name = string
+    application_type = string
+    log_analytics_workspace_id = string
+  })
+}

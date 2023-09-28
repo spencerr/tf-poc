@@ -16,4 +16,10 @@ locals {
     name = "cdb-sandbox-tfpoc-feature"
     sku_name = "Standard"
   }
+
+  app_insights = {
+    name = "ai-sandbox-tfpoc-feature"
+    application_type = "web"
+    log_analytics_workspace_id = ""
+  }
 }

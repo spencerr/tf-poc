@@ -79,3 +79,14 @@ resource "azurerm_storage_container" "feature" {
   storage_account_name = azurerm_storage_account.feature.name
   container_access_type = "private"
 }
+
+module "feature_app_insights" {
+  source = "../../../../modules/application-insights"
+
+  name = var.app_insights.name
+  resource_group_name = azurerm_resource_group.feature.name
+  location = azurerm_resource_group.feature.location
+  log_analytics_workspace_id = var.app_insights.log_analytics_workspace_id
+  application_type = var.app_insights.application_type
+  tags = {}
+}
