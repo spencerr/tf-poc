@@ -16,4 +16,10 @@ locals {
     name = "cdb-sandbox-tfpoc-feature"
     sku_name = "Standard"
   }
+
+  app_insights = {
+    name = "ai-sandbox-tfpoc-feature"
+    application_type = "web"
+    log_analytics_workspace_id = "/subscriptions/8f09f7f4-7b25-4d6f-88a5-847b1751c4ce/resourceGroups/rg-sandbox-tfpoc-bootstrap/providers/Microsoft.OperationalInsights/workspaces/la-sandbox-tfpoc"
+  }
 }
