@@ -20,6 +20,6 @@ locals {
   app_insights = {
     name = "ai-sandbox-tfpoc-feature"
     application_type = "web"
-    log_analytics_workspace_id = "0323cff5-fc49-46d9-98a5-f6d3e82b1290"
+    log_analytics_workspace_id = "/subscriptions/8f09f7f4-7b25-4d6f-88a5-847b1751c4ce/resourceGroups/rg-sandbox-tfpoc-bootstrap/providers/Microsoft.OperationalInsights/workspaces/la-sandbox-tfpoc"
   }
 }
