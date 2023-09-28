@@ -7,14 +7,6 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  features {
-    application_insights {
-      disable_generated_rule = true
-    }
-  }
-}
-
 resource "azurerm_application_insights" "ai" {
   name                = var.name
   location            = var.location
