@@ -20,6 +20,6 @@ locals {
   app_insights = {
     name = "ai-sandbox-tfpoc-feature"
     application_type = "web"
-    log_analytics_workspace_id = ""
+    log_analytics_workspace_id = "0323cff5-fc49-46d9-98a5-f6d3e82b1290"
   }
 }
