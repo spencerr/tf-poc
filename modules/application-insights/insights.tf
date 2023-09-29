@@ -15,7 +15,6 @@ resource "azurerm_application_insights" "ai" {
   application_type    = var.application_type
 
   tags = var.tags
-
   lifecycle {
     ignore_changes = [tags["BuiltTimeStamp"], ]
   }
