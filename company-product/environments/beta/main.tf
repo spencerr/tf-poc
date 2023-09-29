@@ -24,7 +24,7 @@ terraform {
 
 provider "azurerm" {
   skip_provider_registration = true
-  subscription_id            = local.subscription_id
+  subscription_id = local.subscription_id
   features {
     application_insights {
       disable_generated_rule = true
